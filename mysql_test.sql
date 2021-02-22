@@ -60,9 +60,33 @@ select u.username, count(posts.commentsCount) as CommentsCount from users as u l
 -- 29. Кои потребители не са like-вали постове.
 
 -- 30. Кои постове имат like-ове. Покажете id на поста и caption.
-
+select
+	ulp.postsId,
+	p.caption
+from
+	posts as p,
+	users_liked_posts ulp
+where
+	p.id = ulp.postsId
+group by
+	p.id,
+    p.caption
+order by  id DESC;
 -- 31. Кои постове имат най-много like-ове. Покажете id на поста и caption.
-
+select
+	p.id,
+	p.caption,
+	count(ulp.postsId) as maxLikes
+from
+	posts as p,
+	users_liked_posts ulp
+where
+	p.id = ulp.postsId
+group by
+	p.id,
+    p.caption
+HAVING
+	count(ulp.postsId) = (SELECT count(ttt.postsId) as c from users_liked_posts as ttt group by ttt.postsId order by c DESC LIMIT 0,1);
 -- 32. Покажете всички потребители, които не follow-ват никого.
 
 -- 33. Покажете всички потребители, които не са follow-нати от никого.
